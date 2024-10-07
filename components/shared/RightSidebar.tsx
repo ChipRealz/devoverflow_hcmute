@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
-import Rendertag from './Rendertag';
+import RenderTag from './Rendertag';
 
 const hotQuestions = [
     { _id: '1', title: 'How do I use express as a custom server in NextJS?' },
@@ -46,7 +46,7 @@ const RightSidebar = () => {
         <h3 className='h3-bold text-dark200_light900'>Popular Tags</h3>
         <div className='mt-7 flex flex-col gap-4'>
                 {popularTags.map((tag) => (
-                    <Rendertag
+                    <RenderTag
                     key={tag._id}
                     _id={tag._id}
                     name={tag.name}
