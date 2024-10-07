@@ -2,8 +2,31 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher(["/ask-question(.*)"]);
 
+const publicRoutes = [
+  '/',
+  '/api/webhook',
+  '/question/:id',
+  '/tags',
+  '/tags/:id',
+  '/profile/:id',
+  '/community',
+  '/jobs'
+];
+
+const ignoredRoutes = [
+  '/api/webhook', 
+  '/api/chatgpt'
+];
+
 export default clerkMiddleware((auth, request) => {
-  if (isProtectedRoute(request)) auth().protect();
+  if (ignoredRoutes.some(route => request.url.startsWith(route))) {
+    // Skip authentication for ignored routes
+    
+  } else if (isProtectedRoute(request)) {
+    auth().protect();
+  } else if (publicRoutes.some(route => request.url.startsWith(route))) {
+    // Allow access to public routes
+  }
 });
 
 export const config = {
