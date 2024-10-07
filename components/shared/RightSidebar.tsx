@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import RenderTag from "./RenderTag";
+import RenderTag from "./Rendertag";
 
 const hotQuestions = [
   { _id: "1", title: "How do I use express as a custom server in NextJS?" },
