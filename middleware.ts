@@ -1,39 +1,21 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { authMiddleware } from "@clerk/nextjs/server";
 
-const isProtectedRoute = createRouteMatcher(["/ask-question(.*)"]);
-
-const publicRoutes = [
-  '/',
-  '/api/webhook',
-  '/question/:id',
-  '/tags',
-  '/tags/:id',
-  '/profile/:id',
-  '/community',
-  '/jobs'
-];
-
-const ignoredRoutes = [
-  '/api/webhook', 
-  '/api/chatgpt'
-];
-
-export default clerkMiddleware((auth, request) => {
-  if (ignoredRoutes.some(route => request.url.startsWith(route))) {
-    // Skip authentication for ignored routes
-    
-  } else if (isProtectedRoute(request)) {
-    auth().protect();
-  } else if (publicRoutes.some(route => request.url.startsWith(route))) {
-    // Allow access to public routes
-  }
+export default authMiddleware({
+  publicRoutes: [
+    "/",
+    "/api/webhook",
+    "/question/:id",
+    "/tags",
+    "/tags/:id",
+    "/profile/:id",
+    "/community",
+    "/jobs",
+    "/sign-up",
+    "/sign-in",
+  ],
+  ignoredRoutes: ["/api/webhook", "/api/chatgpt"],
 });
 
 export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
