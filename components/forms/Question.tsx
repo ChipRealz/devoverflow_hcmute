@@ -133,7 +133,7 @@ const Question = ({ mongoUserId }: Props) => {
               <FormControl className="mt-3.5">
               <Editor
                 apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
-                onInit={(evt, editor) => {
+                onInit={(_evt, editor) => {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-expect-error
                   editorRef.current = editor
