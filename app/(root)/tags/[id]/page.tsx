@@ -9,9 +9,21 @@ import React from 'react'
 const Page = async ({ params, searchParams}: URLProps) => {
   const result = await getQuestionsByTagId({
     tagId: params.id,
-    page:1,
+    page: 1,
     searchQuery: searchParams.q
-  });
+  }) as {
+    tagTitle: string;
+    questions: Array<{
+      _id: string;
+      title: string;
+      tags: { _id: string; name: string }[];
+      author: { _id: string; name: string; picture: string };
+      upvotes: string[];
+      views: number;
+      answers: Array<object>;
+      createdAt: Date;
+    }>;
+  };
   return (
     <>
         <h1 className="h1-bold text-dark100_light900">{result.tagTitle}</h1> 
