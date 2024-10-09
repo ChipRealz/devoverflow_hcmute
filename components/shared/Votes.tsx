@@ -99,7 +99,7 @@ const Votes = ({
       userId: userId ? JSON.parse(userId) : undefined,
     })
   }, [itemId, userId, pathname, router]);
-  
+
   return (
     <div className="flex gap-5">
       <div className="flex-center gap-2.5">
@@ -118,7 +118,7 @@ const Votes = ({
 
           <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
             <p className="subtle-medium text-dark400_light900">
-              {formatAndDivideNumber(upvotes - 0)}
+              {formatAndDivideNumber(upvotes)}
             </p>
           </div>
         </div>
@@ -138,7 +138,7 @@ const Votes = ({
 
           <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
             <p className="subtle-medium text-dark400_light900">
-              {formatAndDivideNumber(downvotes - 0)}
+              {formatAndDivideNumber(downvotes)}
             </p>
           </div>
         </div>
