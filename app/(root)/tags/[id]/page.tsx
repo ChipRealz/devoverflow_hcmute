@@ -1,29 +1,34 @@
 import QuestionCard from '@/components/cards/QuestionCard';
 import NoResult from '@/components/shared/NoResult';
 import LocalSearchbar from '@/components/shared/search/LocalSearchbar';
-import { IQuestion } from '@/database/question.model';
 import { getQuestionsByTagId } from '@/lib/actions/tag.actions';
 import { URLProps } from '@/types';
 import React from 'react'
+interface IQuestion {
+  _id: string;
+  title: string;
+  tags: {
+    _id: string;
+    name: string;
+  }[];
+  author: {
+    _id: string;
+    name: string;
+    picture: string;
+  };
+  upvotes: string[];
+  views: number;
+  answers: Array<object>;
+  createdAt: Date;
+}
+
 
 const Page = async ({ params, searchParams}: URLProps) => {
   const result = await getQuestionsByTagId({
     tagId: params.id,
-    page: 1,
+    page:1,
     searchQuery: searchParams.q
-  }) as {
-    tagTitle: string;
-    questions: Array<{
-      _id: string;
-      title: string;
-      tags: { _id: string; name: string }[];
-      author: { _id: string; name: string; picture: string };
-      upvotes: string[];
-      views: number;
-      answers: Array<object>;
-      createdAt: Date;
-    }>;
-  };
+  });
   return (
     <>
         <h1 className="h1-bold text-dark100_light900">{result.tagTitle}</h1> 
@@ -45,7 +50,7 @@ const Page = async ({ params, searchParams}: URLProps) => {
         {result.questions.length > 0 ?
           result.questions.map((question: IQuestion) => (
             <QuestionCard 
-              key={question._id}
+              key={question._id as React.Key}
               _id={question._id}
               title={question.title}
               tags={question.tags}
