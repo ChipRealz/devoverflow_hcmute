@@ -18,7 +18,7 @@ interface Props {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AllAnswers = async ({questionId, userId, totalAnswers, page, filter} :Props) => {
-    const result = await getAnswers({
+    const answer = await getAnswers({
         questionId,
       })
     return (
@@ -30,7 +30,7 @@ const AllAnswers = async ({questionId, userId, totalAnswers, page, filter} :Prop
         </div>
         
         <div>
-            {result.answers.map((answer) => (
+            {answer.answers.map((answer) => (
                 <article key={answer._id}
                 className='light-border border-b py-10'>
                     <div className="flex items-center justify-between">
@@ -58,7 +58,15 @@ const AllAnswers = async ({questionId, userId, totalAnswers, page, filter} :Prop
 
                             </div>
                         </div>
-                        <Votes/>
+                        <Votes
+                            type="Answer"
+                            itemId={JSON.stringify(answer._id)}
+                            userId={JSON.stringify(userId)}
+                            upvotes={answer.upvotes.length}
+                            hasupVoted={answer.upvotes.includes(userId)}
+                            downvotes={answer.downvotes.length}
+                            hasdownVoted={answer.downvotes.includes(userId)}
+                        />
                     </div>
                     <ParseHTML data={answer.content}/>
                 </article>
