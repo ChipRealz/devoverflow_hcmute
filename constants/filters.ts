@@ -41,3 +41,14 @@ export const AnswerFilters = [
     { name: "Tag", value: "tag" },
   ];
   
+  export const JobFilters = [
+    { name: "Top Rated", value: "top_rated" },
+    { name: "Recent Post", value: "recent_post" },
+    { name: "Most Apply", value: "most_apply" },
+    { name: "Highest Salary", value: "highest_salary" },
+    { name: "Least Apply", value: "least_apply" },
+    { name: "Lowest Salary", value: "lowest_salary" },
+    { name: "Full-Time", value: "full_time" },
+    { name: "Part-Time", value: "part_time" },
+  ];
+  
