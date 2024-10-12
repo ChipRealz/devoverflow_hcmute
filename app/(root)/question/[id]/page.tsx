@@ -5,7 +5,7 @@ import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/Rendertag";
 import Votes from "@/components/shared/Votes";
-import { getQuestionsById } from "@/lib/actions/question.action";
+import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
@@ -16,7 +16,7 @@ import React from "react";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Question = async ({params}: any) => {
 
-  const result = await getQuestionsById({questionId: params.id});
+  const result = await getQuestionById({questionId: params.id});
   const {userId: clerkId} = auth();
 
   let mongoUser;
