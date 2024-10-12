@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import AnswerTab from '@/components/shared/AnswerTab'
 import ProfileLink from '@/components/shared/ProfileLink'
+import QuestionTab from '@/components/shared/QuestionTab'
 import Stats from '@/components/shared/Stats'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -84,8 +86,19 @@ const Profile = async ({ params, searchParams}: URLProps) => {
         <TabsTrigger value="top-posts" className='tab'>Top Posts</TabsTrigger>
         <TabsTrigger value="answers" className='tab'>Answers</TabsTrigger>
       </TabsList>
-      <TabsContent value="top-posts">POSTS</TabsContent>
-      <TabsContent value="answers">ANSWERS</TabsContent>
+      <TabsContent value="top-posts">
+            <QuestionTab
+            searchParams ={searchParams}
+            userId={userInfo.user._id}
+            clerkId ={clerkId} />
+      </TabsContent>
+      <TabsContent value="answers">
+            <AnswerTab
+            searchParams ={searchParams}
+            userId={userInfo.user._id}
+            clerkId ={clerkId} 
+            />
+      </TabsContent>
       </Tabs>
     </div>
     </>

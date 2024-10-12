@@ -20,9 +20,12 @@ interface QuestionProps {
   views: number;
   answers: Array<object>;
   createdAt: Date;
+  clerkId?: string;
 }
 
 const QuestionCard = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  clerkId,
   _id,
   title,
   tags,
