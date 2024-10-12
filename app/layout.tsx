@@ -43,8 +43,8 @@ export default function RootLayout({
           }}
           >
           <ThemeProvider>
-            <Analytics/>
             {children}
+            <Analytics/>
           </ThemeProvider> 
           </ClerkProvider> 
         </body>
