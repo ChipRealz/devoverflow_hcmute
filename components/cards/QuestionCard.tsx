@@ -17,7 +17,7 @@ interface QuestionProps {
     _id: string;
     name: string;
     picture: string;
-    clerkId?: string;
+    clerkId: string;
   };
   upvotes: string[];
   views: number;
@@ -38,7 +38,7 @@ const QuestionCard = ({
   answers,
   createdAt,
 }: QuestionProps) => {
-  const showActionButtons =  clerkId && clerkId === author._id;
+  const showActionButtons =  clerkId && clerkId === author.clerkId;
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
@@ -55,7 +55,10 @@ const QuestionCard = ({
 
         <SignedIn>
           {showActionButtons && (
-            <EditDeleteAction type="Question" itemId={JSON.stringify(_id)} />
+            <>
+              {console.log("showActionButtons:", showActionButtons)}
+              <EditDeleteAction type="Question" itemId={JSON.stringify(_id)} />
+            </>
           )}
         </SignedIn>
       </div>

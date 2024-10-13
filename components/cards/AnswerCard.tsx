@@ -30,7 +30,7 @@ const AnswerCard = ({
   upvotes,
   createdAt,
 }: Props) => {
-  const showActionButtons =  clerkId && clerkId === author._id;
+  const showActionButtons =  clerkId && clerkId === author.clerkId;
 
   return (
     <div className="card-wrapper rounded-[10px] px-11 py-9">
