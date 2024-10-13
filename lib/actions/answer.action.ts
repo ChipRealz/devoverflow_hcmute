@@ -1,13 +1,8 @@
-"use server";
+"use server"
 
 import Answer from "@/database/answer.model";
 import { connectToDatabase } from "../mongoose";
-import {
-  AnswerVoteParams,
-  CreateAnswerParams,
-  DeleteAnswerParams,
-  GetAnswersParams,
-} from "./shared.types";
+import { AnswerVoteParams, CreateAnswerParams, DeleteAnswerParams, GetAnswersParams } from "./shared.types";
 import Question from "@/database/question.model";
 import { revalidatePath } from "next/cache";
 import Interaction from "@/database/interaction.model";
@@ -19,12 +14,15 @@ export async function createAnswer(params: CreateAnswerParams) {
     const { content, author, question, path } = params;
 
     const newAnswer = await Answer.create({ content, author, question });
-
+    
+    // Add the answer to the question's answers array
     await Question.findByIdAndUpdate(question, {
-      $push: { answers: newAnswer._id },
-    });
+      $push: { answers: newAnswer._id}
+    })
 
-    revalidatePath(path);
+    // TODO: Add interaction...
+
+    revalidatePath(path)
   } catch (error) {
     console.log(error);
     throw error;
@@ -39,7 +37,7 @@ export async function getAnswers(params: GetAnswersParams) {
 
     const answers = await Answer.find({ question: questionId })
       .populate("author", "_id clerkId name picture")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
 
     return { answers };
   } catch (error) {
@@ -56,22 +54,20 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
 
     let updateQuery = {};
 
-    if (hasupVoted) {
-      updateQuery = { $pull: { upvotes: userId } };
+    if(hasupVoted) {
+      updateQuery = { $pull: { upvotes: userId }}
     } else if (hasdownVoted) {
-      updateQuery = {
+      updateQuery = { 
         $pull: { downvotes: userId },
-        $push: { upvotes: userId },
-      };
+        $push: { upvotes: userId }
+      }
     } else {
-      updateQuery = { $addToSet: { upvotes: userId } };
+      updateQuery = { $addToSet: { upvotes: userId }}
     }
 
-    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
-      new: true,
-    });
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, { new: true });
 
-    if (!answer) {
+    if(!answer) {
       throw new Error("Answer not found");
     }
 
@@ -92,22 +88,20 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
 
     let updateQuery = {};
 
-    if (hasdownVoted) {
-      updateQuery = { $pull: { downvote: userId } };
+    if(hasdownVoted) {
+      updateQuery = { $pull: { downvote: userId }}
     } else if (hasupVoted) {
-      updateQuery = {
+      updateQuery = { 
         $pull: { upvotes: userId },
-        $push: { downvotes: userId },
-      };
+        $push: { downvotes: userId }
+      }
     } else {
-      updateQuery = { $addToSet: { downvotes: userId } };
+      updateQuery = { $addToSet: { downvotes: userId }}
     }
 
-    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
-      new: true,
-    });
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, { new: true });
 
-    if (!answer) {
+    if(!answer) {
       throw new Error("Answer not found");
     }
 
@@ -119,6 +113,7 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
     throw error;
   }
 }
+
 export async function deleteAnswer(params: DeleteAnswerParams) {
   try {
     connectToDatabase();
@@ -127,15 +122,12 @@ export async function deleteAnswer(params: DeleteAnswerParams) {
 
     const answer = await Answer.findById(answerId);
 
-    if (!answer) {
+    if(!answer) {
       throw new Error("Answer not found");
     }
 
     await answer.deleteOne({ _id: answerId });
-    await Question.updateMany(
-      { _id: answer.question },
-      { $pull: { answers: answerId } }
-    );
+    await Question.updateMany({ _id: answer.question }, { $pull: { answers: answerId }});
     await Interaction.deleteMany({ answer: answerId });
 
     revalidatePath(path);

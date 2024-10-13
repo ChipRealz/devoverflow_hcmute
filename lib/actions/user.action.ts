@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
+import { FilterQuery } from "mongoose";
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose"
 import { CreateUserParams, DeleteUserParams, GetAllUsersParams, GetSavedQuestionsParams, GetUserByIdParams, GetUserStatsParams, ToggleSaveQuestionParams, UpdateUserParams } from "./shared.types";
 import { revalidatePath } from "next/cache";
 import Question from "@/database/question.model";
-import { FilterQuery } from "mongoose";
 import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getUserById(params: any) {
   try {
     connectToDatabase();
@@ -86,25 +86,24 @@ export async function deleteUser(params: DeleteUserParams) {
     console.log(error);
     throw error;
   }
-
-
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
 
-    // const { page = 1, pageSize = 15, filter, searchQuery } = params;
+    // const { page = 1, pageSize = 20, filter, searchQuery } = params;
+
     const users = await User.find({})
       .sort({ createdAt: -1 })
 
-      return {users};
+    return { users };
   } catch (error) {
     console.log(error);
     throw error;
   }
 }
+
 export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
   try {
     connectToDatabase();
@@ -240,3 +239,12 @@ export async function getUserAnswers(params: GetUserStatsParams) {
     throw error;
   }
 }
+
+// export async function getAllUsers(params: GetAllUsersParams) {
+//   try {
+//     connectToDatabase();
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// }
