@@ -122,19 +122,19 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
     }
   }
   
-//   export async function getTopPopularTags() {
-//     try {
-//       connectToDatabase();
+  export async function getTopPopularTags() {
+    try {
+      connectToDatabase();
   
-//       const popularTags = await Tag.aggregate([
-//         { $project: { name: 1, numberOfQuestions: { $size: "$questions" }}},
-//         { $sort: { numberOfQuestions: -1 }}, 
-//         { $limit: 5 }
-//       ])
+      const popularTags = await Tag.aggregate([
+        { $project: { name: 1, numberOfQuestions: { $size: "$questions" }}},
+        { $sort: { numberOfQuestions: -1 }}, 
+        { $limit: 6 }
+      ])
   
-//       return popularTags;
-//     } catch (error) {
-//       console.log(error);
-//       throw error;
-//     }
-//   }
+      return popularTags;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
