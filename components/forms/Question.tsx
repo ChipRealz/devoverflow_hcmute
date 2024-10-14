@@ -37,10 +37,10 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const parsedQuestionDetails = JSON.parse(questionDetails || '');
+  const parsedQuestionDetails = questionDetails ? JSON.parse(questionDetails) : {};
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const groupedTags = parsedQuestionDetails.tags.map((tag: any) => tag.name);
+  const groupedTags = parsedQuestionDetails.tags ? parsedQuestionDetails.tags.map((tag: any) => tag.name) : [];
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionsSchema>>({
