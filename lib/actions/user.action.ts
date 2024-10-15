@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
 import { FilterQuery } from "mongoose";
@@ -10,7 +11,6 @@ import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getUserById(params: any) {
   try {
     connectToDatabase();
@@ -92,18 +92,36 @@ export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof User> = {};
-    if(searchQuery){
+
+    if(searchQuery) {
       query.$or = [
         { name: { $regex: new RegExp(searchQuery, 'i') }},
         { username: { $regex: new RegExp(searchQuery, 'i') }},
       ]
     }
 
+    let sortOptions = {};
+
+    switch (filter) {
+      case "new_users":
+        sortOptions = { joinedAt: -1 }
+        break;
+      case "old_users":
+        sortOptions = { joinedAt: 1 }
+        break;
+      case "top_contributors":
+        sortOptions = { reputation: -1 }
+        break;
+    
+      default:
+        break;
+    }
+
     const users = await User.find(query)
-      .sort({ createdAt: -1 })
+      .sort(sortOptions);
 
     return { users };
   } catch (error) {
@@ -151,23 +169,40 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
   try {
     connectToDatabase();
 
-    const { clerkId, page = 1, pageSize = 10, filter, searchQuery } = params;
+    const { clerkId, searchQuery, filter } = params;
     
-    const query: FilterQuery<typeof Question> = {};
-    if(searchQuery){
-      query.$or =[
-        { title: { $regex: new RegExp(searchQuery, 'i') }},
-      ]
-    }
+    const query: FilterQuery<typeof Question> = searchQuery
+      ? { title: { $regex: new RegExp(searchQuery, 'i') } }
+      : { };
+
+      let sortOptions = {};
+
+      switch (filter) {
+        case "most_recent":
+          sortOptions = { createdAt: -1 }
+          break;
+        case "oldest":
+          sortOptions = { createdAt: 1 }
+          break;
+        case "most_voted":
+          sortOptions = { upvotes: -1 }
+          break;
+        case "most_viewed":
+          sortOptions = { views: -1 }
+          break;
+        case "most_answered":
+          sortOptions = { answers: -1 }
+          break;
       
-    // ? { title: { $regex: new RegExp(searchQuery, 'i') } }
-      // : {};
+        default:
+          break;
+      }
 
     const user = await User.findOne({ clerkId }).populate({
       path: 'saved',
       match: query,
       options: {
-        sort: { createdAt: -1 },
+        sort: sortOptions,
       },
       populate: [
         { path: 'tags', model: Tag, select: "_id name" },
@@ -253,12 +288,3 @@ export async function getUserAnswers(params: GetUserStatsParams) {
     throw error;
   }
 }
-
-// export async function getAllUsers(params: GetAllUsersParams) {
-//   try {
-//     connectToDatabase();
-//   } catch (error) {
-//     console.log(error);
-//     throw error;
-//   }
-// }
