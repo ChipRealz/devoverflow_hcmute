@@ -35,6 +35,7 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
       connectToDatabase();
   
       const { searchQuery, filter, page = 1, pageSize = 10 } = params;
+      
       const skipAmount = (page - 1) * pageSize;
   
       const query: FilterQuery<typeof Tag> = {};
