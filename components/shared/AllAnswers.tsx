@@ -20,6 +20,8 @@ interface Props {
 const AllAnswers = async ({questionId, userId, totalAnswers, page, filter} :Props) => {
     const answer = await getAnswers({
         questionId,
+        page: page ? +page : 1,
+        sortBy: filter
       })
     return (
     <div className="mt-11">

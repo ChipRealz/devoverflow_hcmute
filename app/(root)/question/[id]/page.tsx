@@ -14,7 +14,7 @@ import Link from "next/link";
 import React from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Question = async ({params}: any) => {
+const Question = async ({params, searchParams}: any) => {
 
   const result = await getQuestionById({questionId: params.id});
   const {userId: clerkId} = auth();
@@ -96,6 +96,8 @@ const Question = async ({params}: any) => {
     questionId={result._id}
     userId={mongoUser._id}
     totalAnswers={result.answers.length}
+    page={searchParams?.page}
+    filter={searchParams?.filter}
     />
 
     <Answer
