@@ -93,12 +93,21 @@ export async function createQuestion(params: CreateQuestionParams) {
     });
 
     // Create an interaction record for the user's ask_question action
-    
-    // Increment author's reputation by +5 for creating a question
+      await Interaction.create({
+        user: author,
+        question: question._id,
+        action: "ask_question",
+        tags: tagDocuments,
+      })
+
+
+    // Increment author's reputation by +5 for creating a question(done)
+      await User.findByIdAndUpdate(author, { $inc: { reputation: 7 }});
+    // Try to increase the reputation of author when adding new tags to new questions (Not implement yet)
 
     revalidatePath(path)
   } catch (error) {
-    
+    console.log(error);
   }
 }
 
@@ -145,6 +154,9 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     }
 
     // Increment author's reputation
+    await User.findByIdAndUpdate(userId, { $inc: { reputation: hasupVoted ? -2 : 2 }});
+    // Increment author's reputation
+    await User.findByIdAndUpdate(question.author, { $inc: { reputation: hasupVoted ? -9 : 9 }});
 
     revalidatePath(path);
   } catch (error) {
@@ -179,6 +191,9 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     }
 
     // Increment author's reputation
+    await User.findByIdAndUpdate(userId, { $inc: { reputation: hasdownVoted ? -2 : 2 }});
+
+    await User.findByIdAndUpdate(question.author, { $inc: { reputation: hasdownVoted ? -9 : 9 }});
 
     revalidatePath(path);
   } catch (error) {
@@ -193,10 +208,16 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
 
     const { questionId, path } = params;
 
+    const question = await Question.findById(questionId);
+
+    const author = question.author;
+
     await Question.deleteOne({ _id: questionId });
     await Answer.deleteMany({ question: questionId });
     await Interaction.deleteMany({ question: questionId });
     await Tag.updateMany({ questions: questionId }, { $pull: { questions: questionId }});
+
+    await User.findByIdAndUpdate(author,   { $inc: { reputation: -7 }});
 
     revalidatePath(path);
   } catch (error) {
