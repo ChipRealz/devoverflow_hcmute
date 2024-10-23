@@ -22,6 +22,7 @@ interface Props {
 const Answer = ({question, questionId, authorId}: Props) => {
     const pathname = usePathname()
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmittingAI, setIsSubmittingAI] = useState(false)
     const {mode} = useTheme()
     const editorRef = React.useRef(null)
     const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -31,49 +32,99 @@ const Answer = ({question, questionId, authorId}: Props) => {
         }
     })
     const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
-        setIsSubmitting(true);
-
-        try {
-         await createAnswer({
-            content: values.answer,
-            author: JSON.parse(authorId), 
-            question: JSON.parse(questionId),
-            path: pathname,
-         });
-
-         form.reset();
-
-         if(editorRef.current){
+      setIsSubmitting(true);
+  
+      try {
+        await createAnswer({
+          content: values.answer,
+          author: JSON.parse(authorId),
+          question: JSON.parse(questionId),
+          path: pathname,
+        });
+  
+        form.reset();
+  
+        if(editorRef.current) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const editor = editorRef.current as any;
+  
+          editor.setContent('');
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSubmitting(false)
+      }
+    }
+  
+    const generateAIAnswer = async () => {
+      if (!authorId) {
+        return;
+      }
+    
+      // Check if question is available
+      if (!question) {
+        console.log('question is:', question); // Debugging step
+        return;
+      }
+    
+      setIsSubmittingAI(true);
+    
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chatgpt`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ question }), // Send the question in the body
+        });
+    
+        const aiAnswer = await response.json();
+    
+        if (aiAnswer.reply) {
+    
+          const formattedAnswer = aiAnswer.reply.replace(/\n/g, '<br />');
+    
+          if (editorRef.current) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const editor = editorRef.current as any;
-
-            editor.setContent('');
-         }
-        } catch (error) {
-            console.log(error)
-            throw error;
-        }finally {
-            setIsSubmitting(false)
+            editor.setContent(formattedAnswer);
+          }
+        } else {
+          alert('No reply from AI');
         }
-    }
+      } catch (error) {
+        console.log('Error:', error);
+      } finally {
+        setIsSubmittingAI(false);
+      }
+    };
+    
   
     return (
     <div>
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
             <h4 className="paragraph-semibold text-dark400_light800">Write your answer for this question.</h4>
         
-        <Button 
-        className="btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
-        onClick={() => {}}
+            <Button className="btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
+        onClick={generateAIAnswer}
         >
-            <Image
-             src="/assets/icons/stars.svg"
-             alt="star"
-             width={15}
-             height={15}
-             className="object-contain"
-            />
-            Generate answers using AI.
+          {isSubmittingAI ? (
+            <>
+            Generating...
+            </>
+          ) : (
+            <>
+              <Image 
+                src="/assets/icons/stars.svg"
+                alt="star"
+                width={12}
+                height={12}
+                className="object-contain"
+              />
+              Generate AI Answer
+              </>
+            )}
         </Button>
         </div>
     <Form {...form}>
