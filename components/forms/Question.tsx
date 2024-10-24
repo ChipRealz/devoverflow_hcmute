@@ -40,7 +40,7 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
 
   const parsedQuestionDetails = questionDetails ? JSON.parse(questionDetails) : {};
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   const groupedTags = parsedQuestionDetails.tags ? parsedQuestionDetails.tags.map((tag: any) => tag.name) : [];
 
   // 1. Define your form.
@@ -92,7 +92,7 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: any) => {
     if (e.key === 'Enter' && field.name === 'tags') {
       e.preventDefault();
@@ -119,7 +119,7 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   const handleTagRemove = (tag: string, field: any) => {
     const newTags = field.value.filter((t: string) => t !== tag);
 

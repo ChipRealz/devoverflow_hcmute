@@ -54,7 +54,7 @@ const Answer = ({question, questionId, authorId}: Props) => {
         form.reset();
   
         if(editorRef.current) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          
           const editor = editorRef.current as any;
   
           editor.setContent('');
@@ -103,7 +103,7 @@ const Answer = ({question, questionId, authorId}: Props) => {
           const formattedAnswer = aiAnswer.reply.replace(/\n/g, '<br />');
     
           if (editorRef.current) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            
             const editor = editorRef.current as any;
             editor.setContent(formattedAnswer);
           }

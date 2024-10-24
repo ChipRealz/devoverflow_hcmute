@@ -122,10 +122,10 @@ export const assignBadges = (params: BadgeParam) => {
 
   criteria.forEach((item) => {
     const { type, count } = item;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    
     const badgeLevels: any = BADGE_CRITERIA[type];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    
     Object.keys(badgeLevels).forEach((level: any) => {
       if(count >= badgeLevels[level]) {
         badgeCounts[level as keyof BadgeCounts] +=1 ;
