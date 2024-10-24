@@ -26,7 +26,7 @@ export default async function Jobs() {
 
   return (
     <>
-        <h1 className="h1-bold text-dark100_light900">Find Jobs</h1> 
+        <h1 className="h1-bold text-dark100_light900">IT Jobs for UTE Future Devs</h1> 
 
         <div className="mt-10 flex w-full flex-col gap-6">
         {jobs.length > 0 ? (
