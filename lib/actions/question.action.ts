@@ -268,11 +268,12 @@ export async function getHotQuestions() {
     throw error;
   }
 }
+
 export async function getRecommendedQuestions(params: RecommendedParams) {
   try {
     await connectToDatabase();
 
-    const { userId, page = 1, pageSize = 10, searchQuery } = params;
+    const { userId, page = 1, pageSize = 20, searchQuery } = params;
 
     // find user
     const user = await User.findOne({ clerkId: userId });
@@ -298,7 +299,9 @@ export async function getRecommendedQuestions(params: RecommendedParams) {
 
     // Get distinct tag IDs from user's interactions
     const distinctUserTagIds = [
-      //@ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ...new Set(userTags.map((tag: any) => tag._id)),
     ];
 
