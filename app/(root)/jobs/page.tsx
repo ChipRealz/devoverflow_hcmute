@@ -114,5 +114,5 @@ export default async function Jobs() {
     </>
   );
 }
-//This is the beta test for Find Jobs, the page is still under development. The page will be updated with more features and improvements in the future. Stay tuned!
+// This is the beta test for Find Jobs, the page is still under development. The page will be updated with more features and improvements in the future. Stay tuned!
 // It will be developed in the future to imporve the user experience and add more features. Stay tuned!
