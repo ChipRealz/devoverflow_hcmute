@@ -4,6 +4,7 @@ import Question from "@/database/question.model";
 import { connectToDatabase } from "../mongoose";
 import { ViewQuestionParams } from "./shared.types";
 import Interaction from "@/database/interaction.model";
+import User from "@/database/user.model";
 
 export async function viewQuestion(params: ViewQuestionParams) {
   try {
@@ -12,7 +13,9 @@ export async function viewQuestion(params: ViewQuestionParams) {
     const { questionId, userId } = params;
 
     // Update view count for the question
-    await Question.findByIdAndUpdate(questionId, { $inc: { views: 1 } });
+    const question = await Question.findByIdAndUpdate(questionId, { $inc: { views: 1 } }, { new: true });
+
+    const author = question.author;
 
     if (userId) {
       const existingInteraction = await Interaction.findOne({
@@ -30,6 +33,13 @@ export async function viewQuestion(params: ViewQuestionParams) {
         question: questionId,
       });
     }
+
+    // Increment author's reputation by +1 for every 5 views on their question
+    const viewCount = question.views;
+    if (viewCount % 5 === 0) {
+      await User.findByIdAndUpdate(author, { $inc: { reputation: 1 } });
+    }
+
   } catch (error) {
     console.log(error);
     throw error;

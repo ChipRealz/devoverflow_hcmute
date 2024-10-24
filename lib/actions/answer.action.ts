@@ -107,11 +107,14 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
       throw new Error("Answer not found");
     }
 
+    if(userId !== answer.author.toString()){
+
     // Increment author's reputation
     await User.findByIdAndUpdate(userId, { $inc: { reputation: hasupVoted ? -3 : 3 }});
 
     await User.findByIdAndUpdate(answer.author, { $inc: { reputation: hasupVoted ? -11 : 11 }});
 
+    }
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -143,12 +146,13 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
     if(!answer) {
       throw new Error("Answer not found");
     }
-
+    
+    if(userId !== answer.author.toString()) {
     // Increment author's reputation
     await User.findByIdAndUpdate(userId, { $inc: { reputation: hasdownVoted ? -3 : 3 }});
 
     await User.findByIdAndUpdate(answer.author, { $inc: { reputation: hasdownVoted ? -11 : 11 }});
-
+    }
     revalidatePath(path);
   } catch (error) {
     console.log(error);
