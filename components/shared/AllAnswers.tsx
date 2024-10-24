@@ -64,11 +64,11 @@ const AllAnswers = async ({questionId, userId, totalAnswers, page, filter} :Prop
                         <Votes
                             type="Answer"
                             itemId={JSON.stringify(answer._id)}
-                            userId={JSON.stringify(userId)}
+                            userId={userId ? JSON.stringify(userId): ""}
                             upvotes={answer.upvotes.length}
-                            hasupVoted={answer.upvotes.includes(userId)}
+                            hasupVoted={userId ? answer.upvotes.includes(userId): false}
                             downvotes={answer.downvotes.length}
-                            hasdownVoted={answer.downvotes.includes(userId)}
+                            hasdownVoted={userId ? answer.downvotes.includes(userId): false}
                         />
                     </div>
                     <ParseHTML data={answer.content}/>

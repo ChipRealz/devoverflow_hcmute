@@ -11,6 +11,7 @@ import { Button } from '../ui/button'
 import Image from 'next/image'
 import { createAnswer } from '@/lib/actions/answer.action'
 import { usePathname } from 'next/navigation'
+import { toast } from '@/hooks/use-toast'
 
 interface Props {
     question: string;
@@ -32,6 +33,14 @@ const Answer = ({question, questionId, authorId}: Props) => {
         }
     })
     const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+        if (!authorId) {
+        return toast({
+          title: "Please log in",
+          description: "You must be logged in to submit an answer",
+          variant: "destructive",
+        });
+      }
+      
       setIsSubmitting(true);
   
       try {
@@ -50,6 +59,11 @@ const Answer = ({question, questionId, authorId}: Props) => {
   
           editor.setContent('');
         }
+
+        return toast({
+          title: 'Answer Submitted',
+          description: 'Your answer has been submitted successfully',
+        });
       } catch (error) {
         console.log(error);
       } finally {
@@ -59,7 +73,10 @@ const Answer = ({question, questionId, authorId}: Props) => {
   
     const generateAIAnswer = async () => {
       if (!authorId) {
-        return;
+        return toast({
+          title: 'Please log in',
+          description: 'You must be logged in to perform this action '
+        })
       }
     
       // Check if question is available
