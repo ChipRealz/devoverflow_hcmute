@@ -15,8 +15,6 @@ export async function viewQuestion(params: ViewQuestionParams) {
     // Update view count for the question
     const question = await Question.findByIdAndUpdate(questionId, { $inc: { views: 1 } }, { new: true });
 
-    const author = question.author;
-
     if (userId) {
       const existingInteraction = await Interaction.findOne({
         user: userId,
@@ -37,7 +35,7 @@ export async function viewQuestion(params: ViewQuestionParams) {
     // Increment author's reputation by +1 for every 5 views on their question
     const viewCount = question.views;
     if (viewCount % 5 === 0) {
-      await User.findByIdAndUpdate(author, { $inc: { reputation: 1 } });
+      await User.findByIdAndUpdate(question.author, { $inc: { reputation: 1 } });
     }
 
   } catch (error) {
@@ -45,3 +43,6 @@ export async function viewQuestion(params: ViewQuestionParams) {
     throw error;
   }
 }
+// Testing the increment of author's reputation (not stable || not working)
+// This function may not be working as expected, as the increment of the author's reputation is not stable.
+// It will be developed further in the future.

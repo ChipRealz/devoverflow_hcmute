@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@/hooks/use-toast";
 import { deleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
 import Image from "next/image";
@@ -16,6 +17,10 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
 
   const handleEdit = () => {
     router.push(`/question/edit/${JSON.parse(itemId)}`)
+    return toast({
+      title: 'Edit Question',
+      variant: 'default'
+    })
   };
 
   const handleDelete = async () => {
@@ -32,6 +37,10 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
         path: pathname 
       })
     }
+    return toast({
+      title: `${type} deleted`,
+      variant: 'destructive'
+    })
   };
 
   return (
