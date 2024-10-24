@@ -8,6 +8,13 @@ import { getSavedQuestions } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
 import {auth} from "@clerk/nextjs/server";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Saved Questions | Dev Overflow for HCMUTE future engineers",
+  description: "saved questions on Dev Overflow",
+}
+
 export default async function Collection({searchParams}: SearchParamsProps) {
     const{ userId } = auth();
     if(!userId) return null;
