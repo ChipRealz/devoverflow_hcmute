@@ -10,6 +10,27 @@ export const metadata: Metadata = {
   description: "Tags on Dev Overflow",
 };
 
+interface Job {
+  job_id: string;
+  employer_name: string;
+  employer_logo?: string;
+  job_city: string;
+  job_state: string;
+  job_country: string;
+  job_publisher: string;
+  job_employment_type: string;
+  job_is_remote: boolean;
+  job_posted_at_timestamp: number;
+  job_offer_expiration_timestamp: number;
+  job_required_experience: {
+    required_experience_in_months: number;
+  };
+  job_description: string;
+  job_benefits?: string[];
+  job_apply_link: string;
+  job_title: string;
+}
+
 export default async function Jobs() {
   const url =
     "https://jsearch.p.rapidapi.com/search?query=Node.js%20developer%20in%20New-York%2C%20USA&page=1&num_pages=1&date_posted=all";
@@ -21,11 +42,11 @@ export default async function Jobs() {
     },
   };
 
-  let jobs = [];
+  let jobs: Job[] = [];
 
   try {
-    const response = await fetch(url, options); // Using the built-in fetch API
-    const result = await response.json(); // Parse the response as JSON
+    const response = await fetch(url, options);
+    const result = await response.json();
     jobs = result.data; // Assuming the API returns jobs under `data`
     console.log(jobs); // Log the jobs data
   } catch (error) {
