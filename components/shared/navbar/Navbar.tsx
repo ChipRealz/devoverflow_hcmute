@@ -5,6 +5,7 @@ import React from 'react'
 import Theme from './Theme'
 import MobileNav from './MobileNav'
 import GlobalSearch from '../search/GlobalSearch'
+import { OrgSwitcher } from '../org-switcher'
 
 const Navbar = () => {
   return (
@@ -31,6 +32,7 @@ const Navbar = () => {
             <Theme/>
             
             <SignedIn>
+            <OrgSwitcher/>
             <UserButton afterSwitchSessionUrl="/"
             appearance={{
                 elements: {
