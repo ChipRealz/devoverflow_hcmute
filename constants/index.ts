@@ -1,4 +1,4 @@
-import { SidebarLink } from "@/types";
+import { SidebarLink, ModeratorSidebarLink } from "@/types";
 export const themes = [
     {value: 'light', label: 'Light Mode', icon: '/assets/icons/sun.svg'},
     {value: 'dark', label: 'Dark Mode', icon: '/assets/icons/moon.svg'},
@@ -40,13 +40,26 @@ export const sidebarLinks: SidebarLink[] = [
       route: "/ask-question",
       label: "Ask a question",
     },
+  ];
+  
+  export const moderatorsidebarLinks: ModeratorSidebarLink[] = [
+    {
+      imgURL: "/assets/icons/home.svg",
+      route: "/moderator",
+      label: "Home",
+    },
     {
       imgURL: "/assets/icons/question.svg",
       route: "/manage-questions",
       label: "Manage Questions",
     },
+    {
+      imgURL: "/assets/icons/tag.svg",
+      route: "/manage-tags",
+      label: "Manage Tags",
+    },
   ];
-  
+
   export const BADGE_CRITERIA = {
     QUESTION_COUNT: {
       BRONZE: 10,

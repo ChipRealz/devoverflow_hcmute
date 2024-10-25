@@ -6,6 +6,11 @@ export interface SidebarLink {
   route: string;
   label: string;
 }
+export interface ModeratorSidebarLink {
+  imgURL: string;
+  route: string;
+  label: string;
+}
 
 export interface Job {
   id?: string;

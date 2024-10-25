@@ -1,24 +1,24 @@
 "use client";
 
-import { sidebarLinks } from '@/constants';
+import { moderatorsidebarLinks } from '@/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
 
 const ModeratorLeftSideBar = () => {
-  const { userId } = useAuth();
+  useAuth();
   const pathname = usePathname();
 
-  // Define the specific clerkIds
-  const clerkIds = ["user_2n9yKIQKzFEWiFSNTtGohNtgHd0", "user_2n9yRQAbVm75yaEwAFrd3sGmKVh", "user_2npM4qgGMMBsk8rnbBtb38B6jBk"];
+  // // Define the specific clerkIds
+  // const clerkIds = ["user_2n9yKIQKzFEWiFSNTtGohNtgHd0", "user_2n9yRQAbVm75yaEwAFrd3sGmKVh", "user_2npM4qgGMMBsk8rnbBtb38B6jBk"];
 
-  // Render the sidebar only if userId is one of the clerkIds
-  if (!userId || !clerkIds.includes(userId)) return null;
+  // // Render the sidebar only if userId is one of the clerkIds
+  // if (!userId || !clerkIds.includes(userId)) return null;
 
   // Filter only for Home and Manage Questions links
-  const filteredLinks = sidebarLinks.filter(
-    (item) => item.route === "/" || item.route === "/manage-questions"
+  const filteredLinks = moderatorsidebarLinks.filter(
+    (item) => item.route === "/moderator" || item.route === "/manage-questions" || item.route === "/manage-tags"
   );
 
   return (
