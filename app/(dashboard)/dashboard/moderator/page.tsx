@@ -1,10 +1,15 @@
+import { Button } from '@/components/ui/button';
 import { Protect } from '@clerk/nextjs';
 import Link from "next/link";
+import { Card, CardContent, CardHeader, CardDescription } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
 
 import React from 'react'
 
 const page = () => {
   return (
+    <>
     <Protect
       condition={(has) => has({ role: 'org:moderator' }) || has({ role: 'org:admin' })}
       fallback={
@@ -20,7 +25,44 @@ const page = () => {
         </div>
       }
     >
+        <div className="mt-4">
+        <Card>
+          <CardHeader>
+            <CardDescription>
+              Home of the moderators!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>
+              Welcome to the moderator dashboard. Here you can manage content, review reports, and perform other moderation tasks.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-4">
+        <Alert>
+          <Terminal className="size-4" />
+          <AlertTitle>Heads up!</AlertTitle>
+          <AlertDescription>
+            Keep up the great work, moderators! Your efforts make our community a better place every day!
+          </AlertDescription>
+        </Alert>
+      </div>
+        <div className="mt-8 flex justify-center space-x-10 max-sm:w-full">
+          <Link href="/dashboard/moderator/questions" className="flex max-sm:w-full">
+            <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
+              Manage Questions
+            </Button>
+          </Link>
+          <Link href="/dashboard/moderator/tags" className="flex max-sm:w-full">
+            <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
+              Manage Tags
+            </Button>
+          </Link>
+        </div>
     </Protect>
+    </>
   )
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>questions</div>
+    <div>tags</div>
   )
 }
 
