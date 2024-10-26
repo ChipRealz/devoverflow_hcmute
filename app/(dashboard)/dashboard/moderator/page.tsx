@@ -7,7 +7,7 @@ import { Terminal } from "lucide-react";
 
 import React from 'react'
 
-const page = () => {
+const Moderator = () => {
   return (
     <>
     <Protect
@@ -66,4 +66,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Moderator

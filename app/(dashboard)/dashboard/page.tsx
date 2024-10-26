@@ -9,12 +9,12 @@ const Page = () => {
         <Card>
           <CardHeader>
             <CardDescription>
-              Home of the moderators!
+              Home of the managers!
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p>
-              Welcome to the moderator dashboard. Here you can manage content, review reports, and perform other moderation tasks.
+              Welcome to the manager dashboard. Here, you can manage content, review reports, and perform other moderation tasks specific to your role.
             </p>
           </CardContent>
         </Card>
@@ -25,7 +25,7 @@ const Page = () => {
           <Terminal className="size-4" />
           <AlertTitle>Heads up!</AlertTitle>
           <AlertDescription>
-            Keep up the great work, moderators! Your efforts make our community a better place every day!
+            Keep up the great work, managers! Your efforts make our community a better place every day!
           </AlertDescription>
         </Alert>
       </div>
