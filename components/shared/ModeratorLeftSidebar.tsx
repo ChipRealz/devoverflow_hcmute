@@ -18,7 +18,7 @@ const ModeratorLeftSideBar = () => {
 
   // Filter only for Home and Manage Questions links
   const filteredLinks = moderatorsidebarLinks.filter(
-    (item) => item.route === "/moderator" || item.route === "/manage-questions" || item.route === "/manage-tags"
+    (item) => item.route === "/dashboard" || item.route === "/manage-questions" || item.route === "/manage-tags"
   );
 
   return (

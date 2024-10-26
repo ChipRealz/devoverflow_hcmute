@@ -45,7 +45,7 @@ export const sidebarLinks: SidebarLink[] = [
   export const moderatorsidebarLinks: ModeratorSidebarLink[] = [
     {
       imgURL: "/assets/icons/home.svg",
-      route: "/moderator",
+      route: "/dashboard",
       label: "Home",
     },
     {
