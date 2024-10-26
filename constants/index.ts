@@ -40,6 +40,11 @@ export const sidebarLinks: SidebarLink[] = [
       route: "/ask-question",
       label: "Ask a question",
     },
+    {
+      imgURL: "/assets/icons/eye.svg",
+      route: "/dashboard",
+      label: "Dashboard",
+    },
   ];
   
   export const moderatorsidebarLinks: ModeratorSidebarLink[] = [
@@ -49,14 +54,14 @@ export const sidebarLinks: SidebarLink[] = [
       label: "Home",
     },
     {
-      imgURL: "/assets/icons/question.svg",
-      route: "/manage-questions",
-      label: "Manage Questions",
+      imgURL: "/assets/icons/users.svg",
+      route: "/dashboard/admin",
+      label: "Admin Dashboard",
     },
     {
-      imgURL: "/assets/icons/tag.svg",
-      route: "/manage-tags",
-      label: "Manage Tags",
+      imgURL: "/assets/icons/users.svg",
+      route: "/dashboard/moderator",
+      label: "Moderator Dashboard",
     },
   ];
 
