@@ -1,10 +1,10 @@
 import ManagerLeftSideBar from "@/components/shared/ManagerLeftSidebar";
 import ManagerRightSideBar from "@/components/shared/ManagerRightSidebar";
-import Navbar from "@/components/shared/navbar/Navbar";
 import React from "react";
 import type { PropsWithChildren } from "react";
 import { Protect } from "@clerk/nextjs";
 import Link from "next/link";
+import ManagerNavbar from "@/components/shared/navbar/ManagerNavbar";
 
 const ManagerLayout = ({ children }: PropsWithChildren) => {
   return (
@@ -28,7 +28,7 @@ const ManagerLayout = ({ children }: PropsWithChildren) => {
       }
     >
       <main className="background-light850_dark100 relative">
-        <Navbar />
+        <ManagerNavbar />
         <div className="flex">
           <ManagerLeftSideBar />
 
