@@ -5,7 +5,7 @@ import RenderTag from "./Rendertag";
 import { getTopPopularTags } from "@/lib/actions/tag.actions";
 import { getHotQuestions } from "@/lib/actions/question.action";
 
-const ModeratorRightSideBar = async () => {
+const ManagerRightSideBar = async () => {
   const hotQuestions = await getHotQuestions();
   const popularTags = await getTopPopularTags();
   return (
@@ -51,4 +51,4 @@ const ModeratorRightSideBar = async () => {
   );
 };
 
-export default ModeratorRightSideBar;
+export default ManagerRightSideBar;

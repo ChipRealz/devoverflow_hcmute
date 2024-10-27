@@ -6,7 +6,7 @@ export interface SidebarLink {
   route: string;
   label: string;
 }
-export interface ModeratorSidebarLink {
+export interface ManagerSidebarLink {
   imgURL: string;
   route: string;
   label: string;
