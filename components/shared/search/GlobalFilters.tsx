@@ -64,3 +64,5 @@ const GlobalFilters = () => {
 }
 
 export default GlobalFilters
+
+// Done the changes in the GlobalFilters component to handle the type filter.
