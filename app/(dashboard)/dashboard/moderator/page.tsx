@@ -55,9 +55,9 @@ const Moderator = () => {
               Manage Questions
             </Button>
           </Link>
-          <Link href="/dashboard/moderator/tags" className="flex max-sm:w-full">
+          <Link href="/dashboard/moderator/answers" className="flex max-sm:w-full">
             <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
-              Manage Tags
+              Manage Answers
             </Button>
           </Link>
         </div>
