@@ -6,8 +6,12 @@ import Theme from './Theme'
 import MobileNav from './MobileNav'
 import GlobalSearch from '../search/GlobalSearch'
 import { OrgSwitcher } from '../org-switcher'
+import { auth } from '@clerk/nextjs/server'
 
 const Navbar = () => {
+    const { userId } = auth();
+    
+    const allowedClerkIds = ["user_2n9yKIQKzFEWiFSNTtGohNtgHd0", "user_2n9yRQAbVm75yaEwAFrd3sGmKVh", "user_2npM4qgGMMBsk8rnbBtb38B6jBk"];
   return (
     <nav className='flex-between background-light900_dark200 
     fixed z-50 w-full gap-5 p-6 shadow-light-300 
@@ -32,7 +36,7 @@ const Navbar = () => {
             <Theme/>
             
             <SignedIn>
-            <OrgSwitcher/>
+            {userId && allowedClerkIds.includes(userId) && <OrgSwitcher/>}
             <UserButton afterSwitchSessionUrl="/"
             appearance={{
                 elements: {
