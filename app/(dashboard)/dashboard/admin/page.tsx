@@ -50,17 +50,7 @@ const Admin = () => {
         </Alert>
       </div>
         <div className="mt-8 flex justify-center space-x-10 max-sm:w-full">
-          <Link href="/dashboard/moderator/questions" className="flex max-sm:w-full">
-            <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
-              Manage Questions
-            </Button>
-          </Link>
-          <Link href="/dashboard" className="flex max-sm:w-full">
-            <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
-              Manage Answers
-            </Button>
-          </Link>
-          <Link href="/dashboard" className="flex max-sm:w-full">
+          <Link href="https://dashboard.clerk.com/" className="flex max-sm:w-full">
             <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
               Manage Users
             </Button>
