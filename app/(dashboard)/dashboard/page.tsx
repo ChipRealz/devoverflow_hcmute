@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const Page = () => {
   return (
@@ -28,6 +30,18 @@ const Page = () => {
             Keep up the great work, managers! Your efforts make our community a better place every day!
           </AlertDescription>
         </Alert>
+        <div className="mt-8 flex justify-center space-x-10 max-sm:w-full">
+          <Link href="/dashboard/admin" className="flex max-sm:w-full">
+            <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
+              Admin Dashboard
+            </Button>
+          </Link>
+          <Link href="/dashboard/moderator" className="flex max-sm:w-full">
+            <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
+              Moderator Dashboard
+            </Button>
+          </Link>
+        </div>
       </div>
     </>
   );
