@@ -17,7 +17,7 @@ interface Props {
     name: string;
     picture: string;
   };
-  upvotes: number;
+  upvotes: string[];
   createdAt: Date;
 }
 
@@ -68,7 +68,7 @@ const AnswerCard = ({
           <Metric
             imgUrl="/assets/icons/like.svg"
             alt="like icon"
-            value={formatAndDivideNumber(upvotes)}
+            value={formatAndDivideNumber(upvotes.length)}
             title=" Votes"
             textStyles="small-medium text-dark400_light800"
           />
