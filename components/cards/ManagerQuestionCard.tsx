@@ -19,7 +19,7 @@ interface QuestionProps {
     picture: string;
     clerkId: string;
   };
-  upvotes: string[];
+  downvotes: string[];
   views: number;
   answers: Array<object>;
   createdAt: Date;
@@ -31,7 +31,7 @@ const ManagerQuestionCard = ({
   title,
   tags,
   author,
-  upvotes,
+  downvotes,
   views,
   answers,
   createdAt,
@@ -74,9 +74,9 @@ const ManagerQuestionCard = ({
           <div className="flex items-center gap-3 max-sm:flex-wrap
           max-sm:justify-start">
           <Metric 
-            imgUrl="/assets/icons/like.svg"
-            alt="Upvotes"
-            value={formatAndDivideNumber(upvotes.length)}
+            imgUrl="/assets/icons/dislike.png"
+            alt="Downvote"
+            value={formatAndDivideNumber(downvotes?.length || 0)}
             title=" Votes"
             textStyles="small-medium text-dark400_light800"
           />

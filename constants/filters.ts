@@ -52,3 +52,13 @@ export const AnswerFilters = [
     { name: "Part-Time", value: "part_time" },
   ];
   
+  export const ManagerQuestionsFilters = [
+    { name: "Most Recent", value: "most_recent" },
+    { name: "Unfrequent", value: "unfrequent" },
+    { name: "Downvoted", value: "downvoted" }
+  ];
+
+  export const ManagerAnswersFilters = [
+    { name: "Recent Answer", value: "recent" },
+    { name: "Bad answers by questions", value: "downvotedbyquestions by questions" }
+  ];

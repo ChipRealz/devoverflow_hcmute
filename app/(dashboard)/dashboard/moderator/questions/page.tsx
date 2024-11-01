@@ -1,13 +1,15 @@
 import ManagerQuestionCard from '@/components/cards/ManagerQuestionCard';
+import Filter from '@/components/shared/Filter';
 import NoResult from '@/components/shared/NoResult';
 import Pagination from '@/components/shared/Pagination';
 import LocalSearchbar from '@/components/shared/search/LocalSearchbar';
-import { getQuestions } from '@/lib/actions/question.action';
+import { ManagerQuestionsFilters } from '@/constants/filters';
+import { getManagerQuestionsParams } from '@/lib/actions/question.action';
 import { SearchParamsProps } from '@/types'
 import React from 'react'
 
 const page = async ({searchParams}: SearchParamsProps) => {
-  const result = await getQuestions({
+  const result = await getManagerQuestionsParams({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
     page: searchParams.page ? +searchParams.page : 1,
@@ -27,6 +29,10 @@ const page = async ({searchParams}: SearchParamsProps) => {
           placeholder="Search for questions"
           otherClasses="flex-1"
         />
+        <Filter
+          filters={ManagerQuestionsFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+        />
       </div>
       <div className="mt-10 flex w-full flex-col gap-6">
         {result.questions.length > 0 ?
@@ -37,7 +43,7 @@ const page = async ({searchParams}: SearchParamsProps) => {
               title={question.title}
               tags={question.tags}
               author={question.author}
-              upvotes={question.upvotes}
+              downvotes={question.downvotes} 
               views={question.views}
               answers={question.answers}
               createdAt={question.createdAt}
@@ -53,7 +59,7 @@ const page = async ({searchParams}: SearchParamsProps) => {
       <div className="mt-9">
       <Pagination
         pageNumber = {searchParams?.page ? +searchParams.page : 1}
-        isNext = {result.isNext}
+        isNext = {result.isNextQuestions}
       />
       </div>
     </>

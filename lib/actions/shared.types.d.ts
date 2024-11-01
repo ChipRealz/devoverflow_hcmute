@@ -16,6 +16,13 @@ export interface GetAnswersParams {
   pageSize?: number;
 }
 
+export interface GetManagerAnswersParams {
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
+  filter?: string;
+}
+
 export interface AnswerVoteParams {
   answerId: string;
   userId: string;
@@ -52,6 +59,13 @@ export interface JobFilterParams {
 }
 
 export interface GetQuestionsParams {
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
+  filter?: string;
+}
+
+export interface GetManagerQuestionsParams {
   page?: number;
   pageSize?: number;
   searchQuery?: string;

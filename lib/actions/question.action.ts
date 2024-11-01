@@ -3,7 +3,7 @@
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import { connectToDatabase } from "../mongoose"
-import { CreateQuestionParams, DeleteQuestionParams, EditQuestionParams, GetQuestionByIdParams, GetQuestionsParams, QuestionVoteParams, RecommendedParams } from "./shared.types";
+import { CreateQuestionParams, DeleteQuestionParams, EditQuestionParams, GetManagerQuestionsParams, GetQuestionByIdParams, GetQuestionsParams, QuestionVoteParams, RecommendedParams } from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import Answer from "@/database/answer.model";
@@ -58,6 +58,58 @@ export async function getQuestions(params: GetQuestionsParams) {
     return { questions, isNext };
   } catch (error) {
     console.log(error)
+    throw error;
+  }
+}
+
+export async function getManagerQuestionsParams(params: GetManagerQuestionsParams) {
+  try {
+    connectToDatabase();
+
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
+
+    const skipAmount = (page - 1) * pageSize;
+
+    const query: FilterQuery<typeof Question> = {};
+
+    let sortOptions = {};
+
+    switch (filter) {
+      case "most_recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "unfrequent":
+        sortOptions = { views: +1 };
+        break;
+      case "downvoted":
+        sortOptions = { downvotes: -1 };
+        break;
+      default:
+        break;
+    }
+
+    const questions = await Question.find(query)
+      .populate({ path: 'tags', model: Tag })
+      .populate({ path: 'author', model: User })
+      .skip(skipAmount)
+      .limit(pageSize)
+      .sort(sortOptions);
+
+      const filteredQuestions = searchQuery
+    ? questions.filter(
+      (question) =>
+        question.author.name.match(new RegExp(searchQuery, "i")) ||
+        question.title.match(new RegExp(searchQuery, "i"))
+    ) 
+    : questions;
+
+    const totalQuestions = await Question.countDocuments(query);
+
+    const isNextQuestions = totalQuestions > skipAmount + questions.length;
+
+    return { questions: filteredQuestions, isNextQuestions };
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 }
