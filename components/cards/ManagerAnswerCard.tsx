@@ -66,8 +66,8 @@ const AnswerCard = ({
 
         <div className="flex-center gap-3">
           <Metric
-            imgUrl="/assets/icons/like.svg"
-            alt="like icon"
+            imgUrl="/assets/icons/dislike.png"
+            alt="dislike icon"
             value={formatAndDivideNumber(downvotes.length)}
             title=" Votes"
             textStyles="small-medium text-dark400_light800"
