@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AnswerTab from '@/components/shared/AnswerTab'
+import approvedClerkIds from '@/components/shared/approvedClerkIds'
 import ProfileLink from '@/components/shared/ProfileLink'
 import QuestionTab from '@/components/shared/QuestionTab'
 import Stats from '@/components/shared/Stats'
@@ -28,8 +29,16 @@ const Profile = async ({ params, searchParams}: URLProps) => {
           width={150}
           className='rounded-full object-cover'/>
           <div className='mt-3'>
-            <h2 className="h2-bold text-dark100_light900">
+            <h2 className="h2-bold text-dark100_light900 flex items-center gap-2">
               {userInfo.user.name}
+              {approvedClerkIds.includes(userInfo.user.clerkId) && (
+                  <Image 
+                    src="/assets/icons/quality.png" 
+                    alt="Verify Icon" 
+                    height={25} 
+                    width={25} 
+                  />
+                )}
             </h2>
             <p className="paragraph-regular text-dark200_light800">
               @{userInfo.user.username}
