@@ -15,15 +15,25 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
       connectToDatabase();
   
       const { userId } = params;
-  
+
       const user = await User.findById(userId);
-  
-      if(!user) throw new Error("User not found");
-  
-      // Find interactions for the user and group by tags...
-      // Interaction...
-  
-      return [ {_id: '1', name: 'tag'}, {_id: '2', name: 'tag2'}]
+
+      if (!user) throw new Error("User not found");
+
+      const topTags = await Question.aggregate([
+        { $match: { author: user._id } },
+        { $unwind: "$tags" },
+        { $group: { _id: "$tags", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 3 },
+      ]);
+
+      const resultTags = await Tag.populate(topTags, {
+        path: "_id",
+        select: "name",
+      });
+
+      return resultTags;
     } catch (error) {
       console.log(error);
       throw error;
