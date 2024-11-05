@@ -174,9 +174,9 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
                     'insertdatetime', 'media', 'table'
                   ],
                   toolbar: 
-                  'undo redo | ' + 'blocks |' +
+                  'undo redo | blocks |' +
                   'codesample | bold italic forecolor | alignleft aligncenter |' +
-                  'alignright alignjustify | bullist numlist',
+                  'alignright alignjustify | bullist numlist |  link  | copy paste | preview ', 
                   content_style: 'body { font-family:Inter; font-size:16px }',
                   skin: mode ==='dark' ? 'oxide-dark' : 'oxide',
                   content_css: mode === 'dark' ? 'dark': 'light',
