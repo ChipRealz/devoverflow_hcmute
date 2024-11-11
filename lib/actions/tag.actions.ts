@@ -4,41 +4,42 @@ import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { GetAllTagsParams, GetQuestionsByTagIdParams, GetTopInteractedTagsParams } from "./shared.types";
-import { FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Tag, {ITag} from "@/database/tag.model";
 import Question from "@/database/question.model";
 // import Question from "@/database/question.model";
 
 export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
-    try {
-      connectToDatabase();
-  
-      const { userId } = params;
+  try {
+    // Await the database connection
+    await connectToDatabase();
 
-      const user = await User.findById(userId);
+    const { userId } = params;
+    const user = await User.findById(userId);
+    if (!user) throw new Error("User not found");
 
-      if (!user) throw new Error("User not found");
+    // Aggregate top tags by user interactions
+    const topTags = await Question.aggregate([
+      { $match: { author: new mongoose.Types.ObjectId(user._id) } },
+      { $unwind: "$tags" },
+      { $group: { _id: "$tags", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 3 },
+    ]);
 
-      const topTags = await Question.aggregate([
-        { $match: { author: user._id } },
-        { $unwind: "$tags" },
-        { $group: { _id: "$tags", count: { $sum: 1 } } },
-        { $sort: { count: -1 } },
-        { $limit: 3 },
-      ]);
+    // Map the aggregated tags to ensure `_id` is an ObjectId
+    const topTagIds = topTags.map(tag => new mongoose.Types.ObjectId(tag._id));
 
-      const resultTags = await Tag.populate(topTags, {
-        path: "_id",
-        select: "name",
-      });
+    // Populate the tags
+    const resultTags = await Tag.find({ _id: { $in: topTagIds } }).select("name");
 
-      return resultTags;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    return resultTags;
+  } catch (error) {
+    console.error("Error fetching top interacted tags:", error);
+    throw error;
   }
+}
   
   export async function getAllTags(params: GetAllTagsParams) {
     try {
