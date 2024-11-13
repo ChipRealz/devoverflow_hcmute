@@ -2,6 +2,7 @@
 "use client"
 import React, { useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from 'react-hook-form';
@@ -36,6 +37,7 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
   const {mode} = useTheme()
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -56,6 +58,27 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
   
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
+    if (!recaptchaToken) {
+      toast({ title: 'Please complete the reCAPTCHA', description: 'reCAPTCHA verification is required.' });
+      return;
+    }
+  
+    // Verify the reCAPTCHA token with the server
+    const recaptchaResponse = await fetch('/api/googlerecaptcha', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: recaptchaToken }),
+    });
+  
+    const recaptchaResult = await recaptchaResponse.json();
+  
+    if (!recaptchaResult.success) {
+      toast({ title: 'reCAPTCHA failed', description: recaptchaResult.message });
+      setRecaptchaToken(null); // Reset token if needed
+      return;
+    }
     setIsSubmitting(true);
     
     try {
@@ -90,6 +113,7 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
       
     } finally {
       setIsSubmitting(false);
+      setRecaptchaToken(null); 
     }
   }
 
@@ -245,6 +269,10 @@ const Question = ({type, mongoUserId, questionDetails }: Props) => {
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
+        />
+         <ReCAPTCHA
+          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY as string}
+          onChange={setRecaptchaToken}
         />
         <Button type="submit" className="primary-gradient w-fit !text-light-900" disabled={isSubmitting}>
           {isSubmitting ? (
