@@ -38,6 +38,7 @@
     "query-string": "^9.1.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-google-recaptcha": "^3.1.0",
     "react-hook-form": "^7.53.0",
     "react-syntax-highlighter": "^15.6.1",
     "svix": "^1.37.0",
