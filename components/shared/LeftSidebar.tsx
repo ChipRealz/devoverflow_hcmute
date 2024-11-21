@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '../ui/button';
 import { SignedOut, useAuth } from '@clerk/nextjs';
+import approvedClerkIds from './approvedClerkIds';
 
 const LeftSidebar = () => {
   const {userId} = useAuth();
@@ -20,6 +21,14 @@ const LeftSidebar = () => {
           if(item.route === '/profile') {
             if(userId) {
               item.route = `/profile/${userId}`
+            } else {
+              return null;
+            }
+          }
+
+          if(item.route === '/dashboard') {
+            if(userId && approvedClerkIds.includes(userId)) {
+              item.route = `/dashboard`
             } else {
               return null;
             }
