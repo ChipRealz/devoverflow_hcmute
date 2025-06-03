@@ -2,12 +2,14 @@ import { connectToDatabase } from '@/lib/mongoose';
 import Activity from '@/database/activity.model';
 import User from '@/database/user.model';
 import Question from '@/database/question.model';
+import Answer from '@/database/answer.model';
 
 interface LogActivityParams {
   clerkId: string;
   actionType: 'upvote' | 'downvote' | 'remove_upvote' | 'remove_downvote' | 'post' | 'answer' | 'save' | 'unsave';
   targetType: 'question' | 'answer';
-  targetId: string;
+  targetId: string; // question ID
+  answerId?: string; // answer ID (optional, only for answer activities)
 }
 
 export async function logActivity({
@@ -15,6 +17,7 @@ export async function logActivity({
   actionType,
   targetType,
   targetId,
+  answerId,
 }: LogActivityParams) {
   try {
     await connectToDatabase();
@@ -29,8 +32,19 @@ export async function logActivity({
     console.log('Fetched question:', question);
 
     let targetContent = '';
+    let targetUserName = '';
     if (question) {
       targetContent = question.title;
+    }
+
+    // If voting on an answer, find the answer and its author using answerId
+    if (targetType === 'answer' && answerId) {
+      const answer = await Answer.findById(answerId).populate('author');
+      console.log('Fetched answer:', answer);
+      if (answer && answer.author && typeof answer.author === 'object') {
+        // @ts-ignore
+        targetUserName = answer.author.name;
+      }
     }
 
     const activity = await Activity.create({
@@ -39,6 +53,7 @@ export async function logActivity({
       targetType,
       targetId,
       targetContent,
+      targetUserName,
     });
 
     return activity;

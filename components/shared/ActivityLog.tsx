@@ -12,6 +12,7 @@ interface Activity {
   targetId: string;
   targetContent: string;
   createdAt: string;
+  targetUserName?: string;
 }
 
 interface ActivityLogProps {
@@ -88,7 +89,7 @@ export default function ActivityLog({ userId }: ActivityLogProps) {
                 className="card-wrapper rounded-[10px] p-6 sm:px-8 flex flex-col gap-2"
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="sm:h3-semibold base-semibold text-dark200_light900">
+                  <span className="sm:h4-semibold base-semibold text-dark200_light900">
                     {getActivityDescription(activity)}
                   </span>
                   <span className="text-sm text-dark400_light700">
@@ -99,9 +100,14 @@ export default function ActivityLog({ userId }: ActivityLogProps) {
                 </div>
                 <Link
                   href={`/question/${activity.targetId}`}
-                  className="mt-1 h3-semibold text-primary-500 hover:underline line-clamp-1"
+                  className="mt-1 h4-semibold text-primary-500 hover:underline line-clamp-1"
                 >
                   {activity.targetContent}
+                  {activity.targetType === 'answer' && activity.targetUserName && (
+                    <span className="ml-2 text-xs text-dark400_light700">
+                      (by {activity.targetUserName})
+                    </span>
+                  )}
                 </Link>
               </div>
             ))}

@@ -187,6 +187,7 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
         actionType: hasupVoted ? 'remove_upvote' : 'upvote',
         targetType: 'answer',
         targetId: questionId,
+        answerId: answerId,
       });
     }
 
@@ -246,6 +247,7 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
         actionType: hasdownVoted ? 'remove_downvote' : 'downvote',
         targetType: 'answer',
         targetId: questionId,
+        answerId: answerId,
       });
     }
 

@@ -6,6 +6,7 @@ export interface IActivity extends Document {
   targetType: 'question' | 'answer';
   targetId: Schema.Types.ObjectId;
   targetContent: string;
+  targetUserName?: string;
   createdAt: Date;
 }
 
@@ -32,6 +33,10 @@ const ActivitySchema = new Schema({
   targetContent: {
     type: String,
     required: true
+  },
+  targetUserName: {
+    type: String,
+    default: ''
   },
   createdAt: { 
     type: Date, 
