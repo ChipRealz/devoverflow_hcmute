@@ -9,6 +9,7 @@ import { revalidatePath } from "next/cache";
 import Answer from "@/database/answer.model";
 import Interaction from "@/database/interaction.model";
 import { FilterQuery } from "mongoose";
+import { logActivity } from './activity.action';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getQuestions(params: GetQuestionsParams) {
@@ -206,13 +207,23 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     }
     
     if(userId !== question.author.toString()) {
-
-    // Increment author's reputation
-    await User.findByIdAndUpdate(userId, { $inc: { reputation: hasupVoted ? -2 : 2 }});
-    // Increment author's reputation
-    await User.findByIdAndUpdate(question.author, { $inc: { reputation: hasupVoted ? -9 : 9 }});
-
+      // Increment author's reputation
+      await User.findByIdAndUpdate(userId, { $inc: { reputation: hasupVoted ? -2 : 2 }});
+      // Increment author's reputation
+      await User.findByIdAndUpdate(question.author, { $inc: { reputation: hasupVoted ? -9 : 9 }});
     }
+
+    // Log the activity
+    const user = await User.findById(userId);
+    if (user) {
+      await logActivity({
+        clerkId: user.clerkId,
+        actionType: hasupVoted ? 'remove_upvote' : 'upvote',
+        targetType: 'question',
+        targetId: questionId,
+      });
+    }
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -229,7 +240,7 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     let updateQuery = {};
 
     if(hasdownVoted) {
-      updateQuery = { $pull: { downvote: userId }}
+      updateQuery = { $pull: { downvotes: userId }}
     } else if (hasupVoted) {
       updateQuery = { 
         $pull: { upvotes: userId },
@@ -246,13 +257,22 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     }
 
     if(userId !== question.author.toString()) {
-
-    // Increment author's reputation
-    await User.findByIdAndUpdate(userId, { $inc: { reputation: hasdownVoted ? -2 : 2 }});
-
-    await User.findByIdAndUpdate(question.author, { $inc: { reputation: hasdownVoted ? -9 : 9 }});
-
+      // Increment author's reputation
+      await User.findByIdAndUpdate(userId, { $inc: { reputation: hasdownVoted ? -2 : 2 }});
+      await User.findByIdAndUpdate(question.author, { $inc: { reputation: hasdownVoted ? -9 : 9 }});
     }
+
+    // Log the activity
+    const user = await User.findById(userId);
+    if (user) {
+      await logActivity({
+        clerkId: user.clerkId,
+        actionType: hasdownVoted ? 'remove_downvote' : 'downvote',
+        targetType: 'question',
+        targetId: questionId,
+      });
+    }
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);

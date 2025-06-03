@@ -14,6 +14,7 @@ import { auth } from '@clerk/nextjs/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import ActivityLog from '@/components/shared/ActivityLog'
 
 const Profile = async ({ params, searchParams}: URLProps) => {
   const { userId : clerkId} = auth();
@@ -96,6 +97,7 @@ const Profile = async ({ params, searchParams}: URLProps) => {
       <TabsList className='background-light800_dark400 min-h-[42px] p-1'>
         <TabsTrigger value="top-posts" className='tab'>Top Posts</TabsTrigger>
         <TabsTrigger value="answers" className='tab'>Answers</TabsTrigger>
+        <TabsTrigger value="activity" className='tab'>Activity</TabsTrigger>
       </TabsList>
       <TabsContent value="top-posts" className='mt-5 flex w-full
       flex-col gap-5'>
@@ -111,6 +113,10 @@ const Profile = async ({ params, searchParams}: URLProps) => {
             userId={userInfo.user._id}
             clerkId ={clerkId} 
             />
+      </TabsContent>
+      <TabsContent value="activity" className='mt-2 flex w-full
+      flex-col gap-4'>
+            <ActivityLog userId={userInfo.user._id.toString()} />
       </TabsContent>
       </Tabs>
     </div>

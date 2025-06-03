@@ -12,6 +12,7 @@ import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
 import { BadgeCriteriaType } from "@/types";
 import { assignBadges } from "../utils";
+import { logActivity } from './activity.action';
 
 export async function getUserById(params: any) {
   try {
@@ -166,6 +167,16 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
         { $addToSet: { saved: questionId }},
         { new: true }
       )
+    }
+
+    // Log the activity
+    if (user.clerkId) {
+      await logActivity({
+        clerkId: user.clerkId,
+        actionType: isQuestionSaved ? 'unsave' : 'save',
+        targetType: 'question',
+        targetId: questionId,
+      });
     }
 
     revalidatePath(path)

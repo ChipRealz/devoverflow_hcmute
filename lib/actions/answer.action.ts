@@ -13,6 +13,7 @@ import Question from "@/database/question.model";
 import { revalidatePath } from "next/cache";
 import Interaction from "@/database/interaction.model";
 import User from "@/database/user.model";
+import { logActivity } from './activity.action';
 
 
 export async function createAnswer(params: CreateAnswerParams) {
@@ -174,6 +175,21 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
         $inc: { reputation: hasupVoted ? -11 : 11 },
       });
     }
+
+    // Log the activity
+    const user = await User.findById(userId);
+    if (user) {
+      const answerDoc = await Answer.findById(answerId);
+      const questionId = answerDoc?.question?.toString() || '';
+
+      await logActivity({
+        clerkId: user.clerkId,
+        actionType: hasupVoted ? 'remove_upvote' : 'upvote',
+        targetType: 'answer',
+        targetId: questionId,
+      });
+    }
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -190,7 +206,7 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
     let updateQuery = {};
 
     if (hasdownVoted) {
-      updateQuery = { $pull: { downvote: userId } };
+      updateQuery = { $pull: { downvotes: userId } };
     } else if (hasupVoted) {
       updateQuery = {
         $pull: { upvotes: userId },
@@ -218,6 +234,21 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
         $inc: { reputation: hasdownVoted ? -11 : 11 },
       });
     }
+
+    // Log the activity
+    const user = await User.findById(userId);
+    if (user) {
+      const answerDoc = await Answer.findById(answerId);
+      const questionId = answerDoc?.question?.toString() || '';
+
+      await logActivity({
+        clerkId: user.clerkId,
+        actionType: hasdownVoted ? 'remove_downvote' : 'downvote',
+        targetType: 'answer',
+        targetId: questionId,
+      });
+    }
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);
