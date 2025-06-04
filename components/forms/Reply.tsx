@@ -35,6 +35,7 @@ const Reply = ({ answerId, authorId }: Props) => {
   })
 
   const handleCreateReply = async (values: z.infer<typeof ReplySchema>) => {
+    console.log('Reply content:', values.reply);
     if (!authorId) {
       return toast({
         title: "Please log in",
