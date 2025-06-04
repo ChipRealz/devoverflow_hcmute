@@ -2,8 +2,8 @@ import { Schema, models, model, Document } from 'mongoose';
 
 export interface IActivity extends Document {
   userId: Schema.Types.ObjectId;
-  actionType: 'upvote' | 'downvote' | 'remove_upvote' | 'remove_downvote' | 'post' | 'answer' | 'save' | 'unsave';
-  targetType: 'question' | 'answer';
+  actionType: 'upvote' | 'downvote' | 'remove_upvote' | 'remove_downvote' | 'post' | 'answer' | 'save' | 'unsave' | 'reply';
+  targetType: 'question' | 'answer' | 'reply';
   targetId: Schema.Types.ObjectId;
   targetContent: string;
   targetUserName?: string;
