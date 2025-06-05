@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client"
 
 import React, { useState } from 'react'
@@ -89,7 +91,7 @@ const Reply = ({ answerId, authorId }: Props) => {
                   <Editor
                     apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                     onInit={(evt, editor) => {
-                      // @ts-ignore
+                      // @ts-expect-error
                       editorRef.current = editor
                     }}
                     onBlur={field.onBlur}

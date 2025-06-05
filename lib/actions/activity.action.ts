@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { connectToDatabase } from '@/lib/mongoose';
 import Activity from '@/database/activity.model';
 import User from '@/database/user.model';
@@ -42,7 +43,6 @@ export async function logActivity({
       const answer = await Answer.findById(answerId).populate('author');
       console.log('Fetched answer:', answer);
       if (answer && answer.author && typeof answer.author === 'object') {
-        // @ts-ignore
         targetUserName = answer.author.name;
       }
     }

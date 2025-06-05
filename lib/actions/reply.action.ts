@@ -80,7 +80,7 @@ export async function getManagerReplies() {
   }
 }
 
-export async function deleteReply(replyId: string) {
+export async function deleteReply(replyId: string, answerId?: string, path?: string) {
   try {
     connectToDatabase();
 
@@ -98,7 +98,12 @@ export async function deleteReply(replyId: string) {
       { $pull: { replies: replyId } }
     );
 
-    revalidatePath("/dashboard/moderator/replies");
+    // Revalidate the appropriate path
+    if (path) {
+      revalidatePath(path);
+    } else {
+      revalidatePath("/dashboard/moderator/replies");
+    }
   } catch (error) {
     console.log(error);
     throw error;
