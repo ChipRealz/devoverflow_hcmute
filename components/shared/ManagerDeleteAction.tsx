@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { deleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
 import { deleteReply } from "@/lib/actions/reply.action";
 import Image from "next/image";
-import { usePathname} from "next/navigation";
+import { usePathname } from "next/navigation";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 interface Props {
   type: string;
@@ -14,15 +16,7 @@ interface Props {
 
 const ManagerDeleteAction = ({ type, itemId }: Props) => {
   const pathname = usePathname();
-//   const router = useRouter();
-
-//   const handleEdit = () => {
-//     router.push(`/question/edit/${JSON.parse(itemId)}`)
-//     return toast({
-//       title: 'Edit Question',
-//       variant: 'default'
-//     })
-//   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -58,28 +52,26 @@ const ManagerDeleteAction = ({ type, itemId }: Props) => {
   };
 
   return (
-    <div className="flex items-center justify-end gap-3 max-sm:w-full">
-      {/* {type === 'Question' && (
-        <Image 
-          src="/assets/icons/edit.svg"
-          alt="Edit"
-          width={15}
-          height={15}
-          className="cursor-pointer object-contain"
-          onClick={handleEdit}
-        />
-      )} */}
-
+    <>
+      <div className="flex items-center justify-end gap-3 max-sm:w-full">
         <Image 
           src="/assets/icons/trash.svg"
           alt="Delete"
           width={15}
           height={15}
           className="cursor-pointer object-contain"
-          onClick={handleDelete}
+          onClick={() => setIsModalOpen(true)}
         />
-    </div>
-  )
-}
+      </div>
 
-export default ManagerDeleteAction
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleDelete}
+        type={type}
+      />
+    </>
+  );
+};
+
+export default ManagerDeleteAction;
