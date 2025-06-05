@@ -60,6 +60,11 @@ const Moderator = () => {
               Manage Answers
             </Button>
           </Link>
+          <Link href="/dashboard/moderator/replies" className="flex max-sm:w-full">
+            <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
+              Manage Replies
+            </Button>
+          </Link>
         </div>
     </Protect>
     </>

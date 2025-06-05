@@ -1,4 +1,3 @@
-
 export const AnswerFilters = [
     { name: "Highest Upvotes", value: "highestUpvotes" },
     { name: "Lowest Upvotes", value: "lowestUpvotes" },
@@ -61,4 +60,9 @@ export const AnswerFilters = [
   export const ManagerAnswersFilters = [
     { name: "Recent Answer", value: "recent" },
     { name: "Bad answers by questions", value: "downvotedbyquestions by questions" }
+  ];
+
+  export const ManagerRepliesFilters = [
+    { name: "Most Recent", value: "most_recent" },
+    { name: "Oldest", value: "oldest" },
   ];

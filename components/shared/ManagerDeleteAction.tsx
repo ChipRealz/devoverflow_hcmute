@@ -3,6 +3,7 @@
 import { toast } from "@/hooks/use-toast";
 import { deleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
+import { deleteReply } from "@/lib/actions/reply.action";
 import Image from "next/image";
 import { usePathname} from "next/navigation";
 
@@ -24,23 +25,36 @@ const ManagerDeleteAction = ({ type, itemId }: Props) => {
 //   };
 
   const handleDelete = async () => {
-    if(type === 'Question') {
-      // Delete question
-      await deleteQuestion({ 
-        questionId: JSON.parse(itemId), 
-        path: pathname 
-      })
-    } else if(type === 'Answer') {
-      // Delete answer
-      await deleteAnswer({ 
-        answerId: JSON.parse(itemId), 
-        path: pathname 
-      })
+    try {
+      if(type === 'Question') {
+        // Delete question
+        await deleteQuestion({ 
+          questionId: JSON.parse(itemId), 
+          path: pathname 
+        });
+      } else if(type === 'Answer') {
+        // Delete answer
+        await deleteAnswer({ 
+          answerId: JSON.parse(itemId), 
+          path: pathname 
+        });
+      } else if(type === 'Reply') {
+        // Delete reply
+        await deleteReply(JSON.parse(itemId));
+      }
+      
+      return toast({
+        title: `${type} deleted`,
+        variant: 'destructive'
+      });
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      return toast({
+        title: `Error deleting ${type}`,
+        description: 'Something went wrong. Please try again.',
+        variant: 'destructive'
+      });
     }
-    return toast({
-      title: `${type} deleted`,
-      variant: 'destructive'
-    })
   };
 
   return (

@@ -14,6 +14,7 @@ import { revalidatePath } from "next/cache";
 import Interaction from "@/database/interaction.model";
 import User from "@/database/user.model";
 import { logActivity } from './activity.action';
+import Reply from "@/database/reply.model";
 
 
 export async function createAnswer(params: CreateAnswerParams) {
@@ -270,11 +271,19 @@ export async function deleteAnswer(params: DeleteAnswerParams) {
       throw new Error("Answer not found");
     }
 
+    // Delete all replies associated with this answer
+    await Reply.deleteMany({ answer: answerId });
+
+    // Delete the answer
     await answer.deleteOne({ _id: answerId });
+    
+    // Remove the answer reference from the question
     await Question.updateMany(
       { _id: answer.question },
       { $pull: { answers: answerId } }
     );
+
+    // Delete all interactions related to this answer
     await Interaction.deleteMany({ answer: answerId });
 
     revalidatePath(path);

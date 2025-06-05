@@ -1,15 +1,20 @@
 import Link from "next/link";
 import Metric from "../shared/Metric";
-import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { getTimestamp } from "@/lib/utils";
 import { SignedIn } from "@clerk/nextjs";
 import ManagerDeleteAction from "../shared/ManagerDeleteAction";
+import ParseHTML from "../shared/ParseHTML";
 
 interface Props {
   clerkId?: string | null;
   _id: string;
-  question: {
+  content: string;
+  answer: {
     _id: string;
-    title: string;
+    question: {
+      _id: string;
+      title: string;
+    };
   };
   author: {
     _id: string;
@@ -17,16 +22,15 @@ interface Props {
     name: string;
     picture: string;
   };
-  downvotes: string[];
   createdAt: Date;
 }
 
-const AnswerCard = ({
+const ManagerReplyCard = ({
   clerkId,
   _id,
-  question,
+  content,
+  answer,
   author,
-  downvotes,
   createdAt,
 }: Props) => {
   return (
@@ -36,15 +40,19 @@ const AnswerCard = ({
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
             {getTimestamp(createdAt)}
           </span>
-          <Link href={`/question/${question._id}/#${_id}`}>
+          <Link href={`/question/${answer.question._id}/#${_id}`}>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
-              {question.title}
+              {answer.question.title}
             </h3>
           </Link>
         </div>
         <SignedIn>
-          <ManagerDeleteAction type="Answer" itemId={JSON.stringify(_id)} />
+          <ManagerDeleteAction type="Reply" itemId={JSON.stringify(_id)} />
         </SignedIn>
+      </div>
+
+      <div className="mt-4">
+        <ParseHTML data={content} />
       </div>
 
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
@@ -52,24 +60,14 @@ const AnswerCard = ({
           imgUrl={author.picture}
           alt="user avatar"
           value={author.name}
-          title={` • asked ${getTimestamp(createdAt)}`}
+          title={` • replied ${getTimestamp(createdAt)}`}
           href={`/profile/${author.clerkId}`}
           textStyles="body-medium text-dark400_light700"
           isAuthor
         />
-
-        <div className="flex-center gap-3">
-          <Metric
-            imgUrl="/assets/icons/dislike.png"
-            alt="dislike icon"
-            value={formatAndDivideNumber(downvotes.length)}
-            title=" Votes"
-            textStyles="small-medium text-dark400_light800"
-          />
-        </div>
       </div>
     </div>
   );
 };
 
-export default AnswerCard;
+export default ManagerReplyCard; 

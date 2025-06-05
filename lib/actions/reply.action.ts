@@ -51,24 +51,56 @@ export async function getReplies(answerId: string) {
   }
 }
 
-export async function deleteReply(replyId: string, answerId: string, path: string) {
+export async function getManagerReplies() {
+  try {
+    connectToDatabase();
+
+    const replies = await Reply.find({})
+      .populate({
+        path: "author",
+        model: "User",
+        select: "_id clerkId name picture",
+      })
+      .populate({
+        path: "answer",
+        model: "Answer",
+        select: "_id question",
+        populate: {
+          path: "question",
+          model: "Question",
+          select: "_id title",
+        },
+      })
+      .sort({ createdAt: -1 });
+
+    return { replies };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteReply(replyId: string) {
   try {
     connectToDatabase();
 
     const reply = await Reply.findById(replyId);
-
     if (!reply) {
       throw new Error("Reply not found");
     }
 
-    await reply.deleteOne({ _id: replyId });
-    await Answer.updateMany(
-      { _id: answerId },
+    // Delete the reply
+    await reply.deleteOne();
+
+    // Remove the reply reference from the answer
+    await Reply.updateMany(
+      { answer: reply.answer },
       { $pull: { replies: replyId } }
     );
 
-    revalidatePath(path);
+    revalidatePath("/dashboard/moderator/replies");
   } catch (error) {
     console.log(error);
+    throw error;
   }
 } 
